@@ -1,2 +1,2 @@
-# capp-data-viz-static
-Repository to submit final version of static portfolio for CAPP 30239
+# capp-data-viz-dynamic
+Repository to submit final version of dynamic portfolio for CAPP 30239
