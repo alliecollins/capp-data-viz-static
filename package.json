@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "domready": "^1.0.8",
+    "gh-pages": "^2.2.0",
     "yarn": "^1.22.0"
   },
   "scripts": {
@@ -42,5 +43,6 @@
       "es2015",
       "stage-2"
     ]
-  }
+  },
+  "homepage": "https://alliecollins.github.io/capp-dynamic"
 }
