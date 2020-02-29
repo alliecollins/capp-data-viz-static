@@ -13,10 +13,47 @@ body {
   width: 100%;
 }
 
- .title {
-    font-family: 'Verdana';
+/* TEXT */
+
+  .title {
+    font-family: 'Cabin';
     font-size:large;
     align-self: center;
+  }
+
+  .title.bar {
+    font-size:medium;
+    font-style: normal;
+  }
+
+  .text {
+    font-family: 'Cabin';
+  }
+
+  .text.legend {
+    font-size:medium;
+  }
+
+  .text.legend.title {
+    font-family: 'Cabin SemiBold'; 
+  }
+  
+  .text.caption {
+    font-size: smaller;
+    font-style: italic;
+  }
+
+  .text.axis {
+    font-size:smaller;
+  }
+
+  .link {
+    color: blue;
+    font-size: x-small;
+  }
+
+  .inspiration {
+    font-size: x-small;
   }
 
 #map-holder {
