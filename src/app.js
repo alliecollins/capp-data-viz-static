@@ -61,6 +61,8 @@ function makeMap(json) {
       .on("mouseover", function(d) {
       d3.select("#tooltip")    
       .style("opacity", 1)
+      .style('left', d3.event.pageX + 'px')
+      .style('top', d3.event.pageY + 'px')
       .text(d.properties.UHF_NEIGH)  
     })          
     .on("mouseout", function(d) { 
