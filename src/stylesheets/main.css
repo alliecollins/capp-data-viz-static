@@ -18,15 +18,6 @@ body {
   height: 600;
 }
 
-path {
-	fill: #ccc;
-	stroke: #fff;
-	stroke-width: .5px;
-}
-path:hover {
-	fill: orange;
-}
-
 div.tooltip { 
   position: absolute;     
   text-align: center;     
@@ -37,49 +28,4 @@ div.tooltip {
   background: #fff; 
   border: 0px;        
   pointer-events: none;     
-}
-
-div.tooltip { 
-  position: absolute;     
-  text-align: center;     
-  width: 80px;          
-  height: 14px;         
-  padding: 2px;       
-  font: 12px sans-serif;    
-  background: #fff; 
-  border: 0px;        
-  pointer-events: none;     
-}
-
-.neighborhood-on{
-  fill: #4B5358;   /* highlight colour for selected country */
-}
-.neighborhoodLabel{
-  display: none;   /* hide all country labels by default */
-}
-.neighborhoodName{
-  fill: #FFFAFF;   /* country label text colour */
-}
-.neighborhoodLabelBg{
-  fill: #30BCED;   /* country label background colour */
-}
-svg rect {
-  fill: #2A2C39;   /* map background colour */
-}
-.neighborhood{
-  fill: #d0d0d0;   /* country colour */
-  stroke: #2A2C39; /* country border colour */
-  stroke-width: 1; /* country border width */
-}
-/*.neighbo-on{
-  fill: #4B5358;    highlight colour for selected country 
-}*/
-.neighborhoodLabel{
-  display: none;   /* hide all country labels by default */
-}
-.neighborhoodName{
-  fill: #FFFAFF;   /* country label text colour */
-}
-.neighborhoodLabelBg{
-  fill: #30BCED;   /* country label background colour */
 }

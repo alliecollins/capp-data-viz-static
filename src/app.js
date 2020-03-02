@@ -8,7 +8,6 @@ import * as d3 from "d3";
 // DATA LOADING
 
 domReady(() => {
-  // this is just one example of how to import data. there are lots of ways to do it!
 
   fetch('./data/sample_output.json')
     .then(response => response.json())
@@ -18,7 +17,7 @@ domReady(() => {
     });
 });
 
-
+// CREATE MAP
 function makeMap(json) {
     console.log(json)
     const width = 1000;
@@ -38,9 +37,13 @@ function makeMap(json) {
     var projection = d3.geoIdentity().reflectY(true).fitSize([width,height], json)
     var path = d3.geoPath().projection(projection);
 
-    var tooltip = d3.select("#map").append("div") 
-    .attr("id", "tooltip")       
-    .style("opacity", 0);
+    //add tooltip
+    d3.select('body')
+    .append('div')
+    .attr('id', 'tooltip')
+    .attr("width", 300)
+    .attr('height', 200)
+    .attr('style', 'position: absolute; opacity: 0;');
 
     var colorScale = d3.scaleThreshold()
     .domain([0, 10, 20, 40, 50, 100])
@@ -56,40 +59,11 @@ function makeMap(json) {
         return colorScale(d.total);
       })
       .on("mouseover", function(d) {
-      d3.select(this)    
-      tooltip.transition()    
-      .duration(200)   
-      .style("opacity", 1);    
-      tooltip.html(d.properties.UHF_NEIGH)  
-      .style("display", "block")   
+      d3.select("#tooltip")    
+      .style("opacity", 1)
+      .text(d.properties.UHF_NEIGH)  
     })          
-    .on("mouseout", function(d) {   
-      tooltip.transition()    
-      .duration(500)    
-      .style("opacity", 0); 
+    .on("mouseout", function(d) { 
+      d3.select("#tooltip").style('opacity', 0)  
     });
   }
-    
-//     svg.selectAll('path')
-//       .data(data.features)
-//       .enter()
-//       .append('path')
-//       .attr('d', d => geoGenerator(d))
-//       // .attr('id', d => 'ctypath-' + d.features)
-//       .attr('opacity', 0)
-//       // .on("mouseover", d => app.mouseOverHandler(d))
-//       // .on("mouseout", app.mouseOutHandler)
-//       // .on("click", d => app.clickHandler(d)); 
-//     }
-
-// //   // // updateMap: function(fips2Value) {
-     
-// //   // //   d3.selectAll('#map path')
-// //   // //     .attr('fill', d => fips2Value[d.properties.GEOID])
-// //   // //     .attr('opacity', 1);
-
-// };
-
-//;
-
-//;
