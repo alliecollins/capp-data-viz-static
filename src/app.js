@@ -45,6 +45,7 @@ function makeMap(json) {
     .attr('height', 200)
     .attr('style', 'position: absolute; opacity: 0;');
 
+    //citation for chloropleth: https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
     var colorScale = d3.scaleThreshold()
     .domain([0, 10, 20, 40, 50, 100])
     .range(d3.schemeBlues[7]);
