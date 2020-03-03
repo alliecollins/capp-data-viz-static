@@ -12,14 +12,30 @@ domReady(() => {
   fetch('./data/sample_output.json')
     .then(response => response.json())
     .then(data => makeMap(data))
+    //.then(data => makeJitter(data))
     .catch(e => {
       console.log(e);
     });
 });
 
+domReady(() => {
+
+  fetch('./data/sample_output_2.json')
+    .then(response => response.json())
+    .then(data => makeJitter(data))
+    .catch(e => {
+      console.log(e);
+    });
+});
+
+//Add slider
+function outputUpdate(num) {
+  console.log("am i gonna make it here")
+  document.querySelector('#output').value = num;
+}
+
 // CREATE MAP
 function makeMap(json) {
-    console.log(json)
     const width = 1000;
     const height = 600;
     const margin = {
@@ -70,3 +86,48 @@ function makeMap(json) {
       d3.select("#tooltip").style('opacity', 0)  
     });
   }
+
+  // CREATE JITTERs
+function makeJitter(json) {
+  var width = 600;
+  var height = 100;
+  var padding = 20;
+
+  var svg = d3.select('#jitter').append('svg')
+    .attr("width", width)
+    .attr("height", height);
+
+  var jitterWidth = 4;
+  var xScale = d3.scaleLinear().domain([0, 200]).range([padding, width - padding * 2]);
+  var xAxis = d3.axisBottom(xScale);
+  var yScale = d3.scaleLinear().domain([0, 5]).range([height - padding, padding]);
+  var yAxis = d3.axisLeft(yScale).ticks(10);
+
+    // x-axis
+
+  svg.selectAll("circle")
+    .data(json.features)
+    .enter()
+    .append("circle")
+    .attr("class", "dot")
+    .attr("cy", function () {
+      return yScale((Math.random()*jitterWidth));
+    })
+    .attr("cx", function (d) {
+        d.total = d.properties['HIV diagnoses'] || 0
+        return xScale(d.total);})
+    .attr("r", 2.5)
+    .style("fill", "blue");
+
+  svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + (height- padding) + ")")
+    .call(xAxis);
+
+  svg.append("g")
+    .attr("class", "y axis")  
+    .attr("transform", "translate(" + padding + ", 0)")
+    .call(yAxis);
+}
+
+

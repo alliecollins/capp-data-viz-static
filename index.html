@@ -17,8 +17,22 @@
         The below map leverages data from NYC's open data portal to illustrate how the rate of new diagnoses has shifted over time, as well the racial disparities that persist. Use the slider to select a given year and the box to the right to select all races or filter for a given rate. The jitter plot will show you where the particular incident fits into the overall distribution of new diagnoses.
       </p>
     </div>
+    <label for="mySlider">Select a year betweeen 2011 and 2015:</label>
+    <form>
+      <input type="range" id="mySlider" value="2011" step="1" min="2011" max="2015" oninput="outputUpdate(value)">
+      <output for=value id="output">value</output>
+    </form>
+    <!-- <input type="range" name="mySlider" id=mySlider min="2011" max="2015" step ="1" list = "tickmarks">
+    <datalist id="tickmarks">
+      <option>2011</option>
+      <option>2012</option>
+      <option>2013</option>
+      <option>2014</option>
+      <option>2015</option>
+    </datalist> -->
     <div id='map'></div>
+    <div id='jitter'></div>
     <div id="app"></div>
-    <script src="bundle.js"></script>
+   <script src="bundle.js"></script>
   </body>
 </html>
