@@ -4,6 +4,7 @@
 
 const domReady = require('domready');
 import * as d3 from "d3";
+import {sliderHorizontal} from 'd3-simple-slider'
 
 // DATA LOADING
 
@@ -29,6 +30,7 @@ domReady(() => {
 });
 
 makeSlider()
+makeDropDown()
 
 //Add slider
 function outputUpdate(num) {
@@ -139,12 +141,13 @@ function makeJitter(json) {
 
 function makeSlider() {
   // Initialize slider
-  var sliderSimple = d3
-    .sliderHorizontal()
+  var sliderSimple = sliderHorizontal()
     .min(2011)
     .max(2015)
+    .step(1)
     .width(300)
     .ticks(5)
+    .tickFormat(d3.format('.0f'))
     .default(2011)
   
   var gSimple = d3
@@ -154,8 +157,22 @@ function makeSlider() {
     .attr('height', 100)
     .append('g')
     .attr('transform', 'translate(30,30)')
-    
+
   gSimple.call(sliderSimple);
+}
+
+function makeDropDown() {
+// List of groups (here I have one group per column)
+  var allGroup = ["All", "Asian/Pacific Islander", "Latino/Hispanic", "Black", "White"]
+
+    // add the options to the button
+  d3.select("#selectButton")
+    .selectAll('myOptions')
+    .data(allGroup)
+    .enter()
+    .append('option')
+    .text(function (d) { return d; }) // text showed in the menu
+    .attr("value", function (d) { return d; }) // corresponding value returned by the button
 }
 
 
