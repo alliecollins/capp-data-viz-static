@@ -28,6 +28,8 @@ domReady(() => {
     });
 });
 
+makeSlider()
+
 //Add slider
 function outputUpdate(num) {
   console.log("am i gonna make it here")
@@ -87,9 +89,9 @@ function makeMap(json) {
     });
   }
 
-  // CREATE JITTERs
+  // CREATE JITTER - citation for basic scatterplot code: https://bl.ocks.org/kheaney21/5649ddce43f3005fc523b027d503bc3d
 function makeJitter(json) {
-  var width = 600;
+  var width = 1000;
   var height = 100;
   var padding = 20;
 
@@ -101,7 +103,6 @@ function makeJitter(json) {
   var xScale = d3.scaleLinear().domain([0, 200]).range([padding, width - padding * 2]);
   var xAxis = d3.axisBottom(xScale);
   var yScale = d3.scaleLinear().domain([0, 5]).range([height - padding, padding]);
-  var yAxis = d3.axisLeft(yScale).ticks(10);
 
     // x-axis
 
@@ -117,7 +118,7 @@ function makeJitter(json) {
         d.total = d.properties['HIV diagnoses'] || 0
         return xScale(d.total);})
     .attr("r", 2.5)
-    .style("fill", "blue");
+    .style("fill", "steelblue");
 
   svg.append("g")
     .attr("class", "x axis")
@@ -128,6 +129,33 @@ function makeJitter(json) {
     .attr("class", "y axis")  
     .attr("transform", "translate(" + padding + ", 0)")
     .call(yAxis);
+
+  svg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("transform", "translate(" + (width / 2) + " ," + (height + padding) + ")")
+    .text("income per capita, inflation-adjusted (dollars)");
+}
+
+function makeSlider() {
+  // Initialize slider
+  var sliderSimple = d3
+    .sliderHorizontal()
+    .min(2011)
+    .max(2015)
+    .width(300)
+    .ticks(5)
+    .default(2011)
+  
+  var gSimple = d3
+    .select('#slider')
+    .append('svg')
+    .attr('width', 500)
+    .attr('height', 100)
+    .append('g')
+    .attr('transform', 'translate(30,30)')
+    
+  gSimple.call(sliderSimple);
 }
 
 

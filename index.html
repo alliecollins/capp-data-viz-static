@@ -4,6 +4,7 @@
     <title>NYC HIV Diagnoses Over Time</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://unpkg.com/d3-simple-slider"></script>
   </head>
   <body>
   	<h1> HIV Diagnoses over time by neighborhood in NYC </h1>
@@ -18,10 +19,12 @@
       </p>
     </div>
     <label for="mySlider">Select a year betweeen 2011 and 2015:</label>
-    <form>
+    <div id="slider"></div>
+
+<!--     <form>
       <input type="range" id="mySlider" value="2011" step="1" min="2011" max="2015" oninput="outputUpdate(value)">
       <output for=value id="output">value</output>
-    </form>
+    </form> -->
     <!-- <input type="range" name="mySlider" id=mySlider min="2011" max="2015" step ="1" list = "tickmarks">
     <datalist id="tickmarks">
       <option>2011</option>
