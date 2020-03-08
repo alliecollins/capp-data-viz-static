@@ -6,7 +6,7 @@ import {sliderHorizontal} from 'd3-simple-slider'
 // DATA LOADING
 domReady(() => {
 
-  fetch('./data/sample_output_2.json')
+  fetch('./data/geoData.json')
     .then(response => response.json())
     .then(data => runAll(data))
     //.then(data => makeJitter(data))
@@ -27,8 +27,6 @@ function runAll(json) {
 
 // CREATE MAP
 function makeMap(json, year, race) {
-  console.log("I'm here")
-  console.log(year)
 
     const width = 1000;
     const height = 600;
@@ -41,32 +39,26 @@ function makeMap(json, year, race) {
 
     var svg = d3.select('#map').append('svg')
       .attr('width', margin.left + width + margin.right)
-      .attr('height', margin.top + height + margin.bottom);
+      .attr('height', margin.top + height + margin.bottom)
+      .selectAll('path')
+      .data(json.features);
 
     //citation for the identity projection function: https://bl.ocks.org/KingOfCramers/f3a2f8de1cfbbb55d9ca75d1335c8a73
     var projection = d3.geoIdentity().reflectY(true).fitSize([width,height], json)
     var path = d3.geoPath().projection(projection);
-
-    //add tooltip
-    d3.select('body')
-    .append('div')
-    .attr('id', 'tooltip')
-    .attr("width", 300)
-    .attr('height', 200)
-    .attr('style', 'position: absolute; opacity: 0;');
 
     //citation for chloropleth: https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
     var colorScale = d3.scaleThreshold()
     .domain([0, 10, 20, 40, 50, 75, 100])
     .range(d3.schemeBlues[7]);
     
-    svg.selectAll('path')
-      .data(json.features)
-      .enter()
-      .append('path')
-      .filter(function(d) { return d.properties.Year === year })
-      .attr('d', path)
-      .attr("fill", function (d) {
+    svg.enter()
+    .append('path')
+    .filter(function(d) { return d.properties.Year === year})
+    //.filter(function(d) { return d.properties.Year === year || d.properties.Race == race})
+    //.filter(function(d) { return d.properties.Race === race})
+    .attr('d', path)
+    .attr("fill", function (d) {
         d.total = d.properties['HIV diagnoses'] || 0;
         return colorScale(d.total);
       })
@@ -80,7 +72,16 @@ function makeMap(json, year, race) {
     .on("mouseout", function(d) { 
       d3.select("#tooltip").style('opacity', 0)  
     });
-    console.log("do I get to the end")
+
+    svg.exit().remove();
+
+    //add tooltip
+    d3.select('body')
+    .append('div')
+    .attr('id', 'tooltip')
+    .attr("width", 300)
+    .attr('height', 200)
+    .attr('style', 'position: absolute; opacity: 0;');
   }
 
   // CREATE JITTER - citation for basic scatterplot code: https://bl.ocks.org/kheaney21/5649ddce43f3005fc523b027d503bc3d
@@ -140,6 +141,7 @@ function makeSlider(json) {
     .tickFormat(d3.format('.0f'))
     .default(2011)
     .on('onchange', val => {
+      d3.select('#map').selectAll("*").remove();
       var newYear = val
       var currentRace = document.getElementById("selectButton").value
       makeMap(json, newYear, currentRace)
@@ -153,6 +155,7 @@ function makeSlider(json) {
     .append('g')
     .attr('transform', 'translate(30,30)')
 
+
   gSimple.call(sliderSimple);
 }
 
@@ -161,11 +164,24 @@ function makeDropDown(json) {
   var allGroup = ["All", "Asian/Pacific Islander", "Latino/Hispanic", "Black", "White"]
 
   // add the options to the button
-  d3.select("#selectButton")
+  var myButton = d3.select("#selectButton")
     .selectAll('myOptions')
     .data(allGroup)
     .enter()
     .append('option')
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
+  
+  d3.select("select")
+  .on("change", function(d) {
+      //d3.select('#map').selectAll("*").remove();
+      var newRace = d3.select(this).property("value")
+      //var currentYear = document.getElementById("slider").value
+      console.log(newRace)
+      console.log(document.getElementById("slider").value)
+      //d3.select("#slider").call(slider)
+      // currentYear = slider.value
+      // console.log(currentYear)
+      //makeMap(json, currentYear, newRace)
+    });
 }
