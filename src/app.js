@@ -1,45 +1,35 @@
-// if the data you are going to import is small, then you can import it using es6 import
-// import MY_DATA from './app/data/example.json'
-// (I tend to think it's best to use screaming snake case for imported json)
-
+//IMPORT STATEMENTS
 const domReady = require('domready');
 import * as d3 from "d3";
 import {sliderHorizontal} from 'd3-simple-slider'
 
 // DATA LOADING
-
 domReady(() => {
 
-  fetch('./data/sample_output.json')
+  fetch('./data/sample_output_2.json')
     .then(response => response.json())
-    .then(data => makeMap(data))
+    .then(data => runAll(data))
     //.then(data => makeJitter(data))
     .catch(e => {
       console.log(e);
     });
 });
 
-domReady(() => {
 
-  fetch('./data/sample_output_2.json')
-    .then(response => response.json())
-    .then(data => makeJitter(data))
-    .catch(e => {
-      console.log(e);
-    });
-});
-
-makeSlider()
-makeDropDown()
-
-//Add slider
-function outputUpdate(num) {
-  console.log("am i gonna make it here")
-  document.querySelector('#output').value = num;
+//WRAPPER FUNCTON
+function runAll(json) {
+  makeMap(json, 2011, "All")
+  makeJitter(json)
+  makeSlider(json)
+  makeDropDown(json)
 }
 
+
 // CREATE MAP
-function makeMap(json) {
+function makeMap(json, year, race) {
+  console.log("I'm here")
+  console.log(year)
+
     const width = 1000;
     const height = 600;
     const margin = {
@@ -67,13 +57,14 @@ function makeMap(json) {
 
     //citation for chloropleth: https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
     var colorScale = d3.scaleThreshold()
-    .domain([0, 10, 20, 40, 50, 100])
+    .domain([0, 10, 20, 40, 50, 75, 100])
     .range(d3.schemeBlues[7]);
     
     svg.selectAll('path')
       .data(json.features)
       .enter()
       .append('path')
+      .filter(function(d) { return d.properties.Year === year })
       .attr('d', path)
       .attr("fill", function (d) {
         d.total = d.properties['HIV diagnoses'] || 0;
@@ -89,6 +80,7 @@ function makeMap(json) {
     .on("mouseout", function(d) { 
       d3.select("#tooltip").style('opacity', 0)  
     });
+    console.log("do I get to the end")
   }
 
   // CREATE JITTER - citation for basic scatterplot code: https://bl.ocks.org/kheaney21/5649ddce43f3005fc523b027d503bc3d
@@ -127,11 +119,6 @@ function makeJitter(json) {
     .attr("transform", "translate(0," + (height- padding) + ")")
     .call(xAxis);
 
-  svg.append("g")
-    .attr("class", "y axis")  
-    .attr("transform", "translate(" + padding + ", 0)")
-    .call(yAxis);
-
   svg.append("text")
     .attr("class", "x label")
     .attr("text-anchor", "end")
@@ -139,8 +126,10 @@ function makeJitter(json) {
     .text("income per capita, inflation-adjusted (dollars)");
 }
 
-function makeSlider() {
-  // Initialize slider
+function makeSlider(json) {
+  console.log(json.features)
+      // Initialize slider
+
   var sliderSimple = sliderHorizontal()
     .min(2011)
     .max(2015)
@@ -149,7 +138,13 @@ function makeSlider() {
     .ticks(5)
     .tickFormat(d3.format('.0f'))
     .default(2011)
-  
+    .on('onchange', val => {
+      var newYear = val
+      var currentRace = document.getElementById("selectButton").value
+      //console.log(newYear, currentRace)
+      makeMap(json, newYear, currentRace)
+    });
+
   var gSimple = d3
     .select('#slider')
     .append('svg')
@@ -161,11 +156,11 @@ function makeSlider() {
   gSimple.call(sliderSimple);
 }
 
-function makeDropDown() {
-// List of groups (here I have one group per column)
+function makeDropDown(json) {
+// citation for code used: https://www.d3-graph-gallery.com/graph/line_select.html
   var allGroup = ["All", "Asian/Pacific Islander", "Latino/Hispanic", "Black", "White"]
 
-    // add the options to the button
+  // add the options to the button
   d3.select("#selectButton")
     .selectAll('myOptions')
     .data(allGroup)
@@ -175,4 +170,46 @@ function makeDropDown() {
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 }
 
+  //   //ADD INTERACTIVE NAVIGATION ITEMS
+
+  //   // Initialize slider
+  //   var sliderSimple = sliderHorizontal()
+  //     .min(2011)
+  //     .max(2015)
+  //     .step(1)
+  //     .width(300)
+  //     .ticks(5)
+  //     .tickFormat(d3.format('.0f'))
+  //     .default(2011)
+  //     .on('onchange', val => {
+  //       d3.select('p#value-simple').text(d3.format('.2%')(val));
+  //       console.log(typeof(val))
+  //       console.log(document.getElementById("selectButton").value)
+  //       console.log(json.features[1].properties[1])
+  //       var newData = json.features.filter(function(d) { return d.properties.Year === val })
+  //       makeMap(newData)
+  //     });
+
+    
+  //   var gSimple = d3
+  //     .select('#slider')
+  //     .append('svg')
+  //     .attr('width', 500)
+  //     .attr('height', 100)
+  //     .append('g')
+  //     .attr('transform', 'translate(30,30)')
+
+  //   gSimple.call(sliderSimple);
+
+  // // citation for code used: https://www.d3-graph-gallery.com/graph/line_select.html
+  //   var allGroup = ["All", "Asian/Pacific Islander", "Latino/Hispanic", "Black", "White"]
+
+  //   // add the options to the button
+  //   d3.select("#selectButton")
+  //     .selectAll('myOptions')
+  //     .data(allGroup)
+  //     .enter()
+  //     .append('option')
+  //     .text(function (d) { return d; }) // text showed in the menu
+  //     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 
