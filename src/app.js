@@ -126,9 +126,10 @@ function makeJitter(json) {
     .text("income per capita, inflation-adjusted (dollars)");
 }
 
+//ADD INTERACTIVE TOOLS
+
 function makeSlider(json) {
-  console.log(json.features)
-      // Initialize slider
+  // Initialize slider
 
   var sliderSimple = sliderHorizontal()
     .min(2011)
@@ -141,7 +142,6 @@ function makeSlider(json) {
     .on('onchange', val => {
       var newYear = val
       var currentRace = document.getElementById("selectButton").value
-      //console.log(newYear, currentRace)
       makeMap(json, newYear, currentRace)
     });
 
@@ -169,47 +169,3 @@ function makeDropDown(json) {
     .text(function (d) { return d; }) // text showed in the menu
     .attr("value", function (d) { return d; }) // corresponding value returned by the button
 }
-
-  //   //ADD INTERACTIVE NAVIGATION ITEMS
-
-  //   // Initialize slider
-  //   var sliderSimple = sliderHorizontal()
-  //     .min(2011)
-  //     .max(2015)
-  //     .step(1)
-  //     .width(300)
-  //     .ticks(5)
-  //     .tickFormat(d3.format('.0f'))
-  //     .default(2011)
-  //     .on('onchange', val => {
-  //       d3.select('p#value-simple').text(d3.format('.2%')(val));
-  //       console.log(typeof(val))
-  //       console.log(document.getElementById("selectButton").value)
-  //       console.log(json.features[1].properties[1])
-  //       var newData = json.features.filter(function(d) { return d.properties.Year === val })
-  //       makeMap(newData)
-  //     });
-
-    
-  //   var gSimple = d3
-  //     .select('#slider')
-  //     .append('svg')
-  //     .attr('width', 500)
-  //     .attr('height', 100)
-  //     .append('g')
-  //     .attr('transform', 'translate(30,30)')
-
-  //   gSimple.call(sliderSimple);
-
-  // // citation for code used: https://www.d3-graph-gallery.com/graph/line_select.html
-  //   var allGroup = ["All", "Asian/Pacific Islander", "Latino/Hispanic", "Black", "White"]
-
-  //   // add the options to the button
-  //   d3.select("#selectButton")
-  //     .selectAll('myOptions')
-  //     .data(allGroup)
-  //     .enter()
-  //     .append('option')
-  //     .text(function (d) { return d; }) // text showed in the menu
-  //     .attr("value", function (d) { return d; }) // corresponding value returned by the button
-
