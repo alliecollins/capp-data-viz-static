@@ -2,6 +2,12 @@
 const domReady = require("domready");
 import * as d3 from "d3";
 import { sliderHorizontal } from "d3-simple-slider";
+import "./stylesheets/main.css";
+import 'seedrandom';
+
+//SET RANDOM SEED FOR JITTER PLOT
+var seedrandom = require('seedrandom');
+seedrandom('hello.', { global: true });
 
 // DATA LOADING
 domReady(() => {
@@ -18,10 +24,11 @@ domReady(() => {
 function runAll(json) {
   const state = {
     year: 2011,
-    race: "All"
+    race: "All",
+    line: [{x: 0, y: 0}, {x: 0, y: 5}] 
   };
   makeMap(json, state.year, state.race);
-  makeJitter(json);
+  makeJitter(json, state.line);
   makeSlider(json, function(d) {
     d3.select('#map').selectAll("*").remove();
     state.year = d;
@@ -61,10 +68,25 @@ function makeMap(json, year, race) {
   var path = d3.geoPath().projection(projection);
 
   //citation for chloropleth: https://www.d3-graph-gallery.com/graph/choropleth_hover_effect.html
-  var colorScale = d3
-    .scaleThreshold()
-    .domain([0, 5, 10, 20, 30, 50, 75, 100, 125, 175])
-    .range(d3.schemeBlues[7]);
+  var colorScale = d3.scaleThreshold()
+    .domain([0, 5, 10, 20, 30, 50, 100, 125])
+    .range(d3.schemeBlues[9]);
+
+  // citation for legend: http://eyeseast.github.io/visible-data/2013/08/27/responsive-legends-with-d3/
+  var legend = d3.select('#legend')
+    .append('ul')
+    .attr('class', 'list-inline');
+
+  var keys = legend.selectAll('li.key')
+      .data(colorScale.range());
+
+  keys.enter().append('li')
+      .attr('class', 'key')
+      .style('border-top-color', String)
+      .text(function(d) {
+          var r = colorScale.invertExtent(d);
+          return r;
+    });
 
   svg
     .enter()
@@ -85,10 +107,14 @@ function makeMap(json, year, race) {
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px")
         .text(d.properties.UHF_NEIGH);
+      
+      var points = [{x: d.properties["HIV diagnosis rate"], y: 0}, {x: d.properties["HIV diagnosis rate"], y: 5}]
+      d3.select('#jitter').selectAll("*").remove();
+      makeJitter(json, points);
     })
-    .on("mouseout", function(d) {
-      d3.select("#tooltip").style("opacity", 0);
-    });
+    // .on("mouseout", function(d) {
+    //   d3.select("#tooltip").style("opacity", 0);
+    // });
 
   //add tooltip
   d3.select("#tooltip")
@@ -98,7 +124,7 @@ function makeMap(json, year, race) {
 }
 
 // CREATE JITTER - citation for basic scatterplot code: https://bl.ocks.org/kheaney21/5649ddce43f3005fc523b027d503bc3d
-function makeJitter(json) {
+function makeJitter(json, points) {
   var width = 1000;
   var height = 100;
   var padding = 20;
@@ -121,7 +147,6 @@ function makeJitter(json) {
     .range([height - padding, padding]);
 
   // x-axis
-
   svg
     .selectAll("circle")
     .data(json.features)
@@ -135,7 +160,7 @@ function makeJitter(json) {
       d.total = d.properties["HIV diagnosis rate"] || 0;
       return xScale(d.total);
     })
-    .attr("r", 2.5)
+    .attr("r", 2)
     .style("fill", "steelblue");
 
   svg
@@ -152,7 +177,21 @@ function makeJitter(json) {
       "transform",
       "translate(" + width / 2 + " ," + (height + padding) + ")"
     )
-    .text("income per capita, inflation-adjusted (dollars)");
+
+  //took some ideas for line from: https://www.dashingd3js.com/svg-paths-and-d3js
+
+  var lineFunction = d3.line()
+     .x(d => xScale(d.x))
+     .y(d => yScale(d.y))
+     //.interpolate("linear")
+
+  svg
+  .append('path')
+  .attr("d", lineFunction(points))
+  .attr("stroke", "red")
+   .attr("stroke-width",5)
+  .attr("fill", "none");
+
 }
 
 //ADD INTERACTIVE TOOLS

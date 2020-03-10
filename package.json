@@ -33,6 +33,7 @@
     "d3-simple-slider": "^1.5.4",
     "domready": "^1.0.8",
     "gh-pages": "^2.2.0",
+    "seedrandom": "^3.0.5",
     "yarn": "^1.22.0"
   },
   "scripts": {

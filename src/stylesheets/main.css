@@ -5,10 +5,30 @@ a {
 
 html,
 body {
-  background: #D6D6CE;
+  background: #F9F9F9;	
   font-family: Verdana, Geneva, sans-serif;
   height: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 10;
+  padding: 10;
   width: 100%;
+}
+#tooltip {
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+#map {
+	stroke: white;
+}
+
+#legend {
+    padding: 1.5em 0 0 1.5em;
+}
+
+li.key {
+    border-top-width: 15px;
+    border-top-style: solid;
+    font-size: .75em;
+    width: 10%;
+    padding-left: 0;
+    padding-right: 0;
 }
