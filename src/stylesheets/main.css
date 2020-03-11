@@ -13,7 +13,13 @@ body {
   width: 100%;
 }
 #tooltip {
-  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+	line-height: 1;
+	font-size: 8;
+	font-weight: bold;
+	padding: 10px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 2px;
 }
 
 #map {
@@ -22,6 +28,7 @@ body {
 
 #legend {
     padding: 1.5em 0 0 1.5em;
+    display: block;
 }
 
 li.key {
@@ -31,4 +38,8 @@ li.key {
     width: 10%;
     padding-left: 0;
     padding-right: 0;
+}
+
+li {
+	display: inline-block;
 }

@@ -3,18 +3,17 @@ const domReady = require("domready");
 import * as d3 from "d3";
 import { sliderHorizontal } from "d3-simple-slider";
 import "./stylesheets/main.css";
-import 'seedrandom';
+//import 'seedrandom';
 
 //SET RANDOM SEED FOR JITTER PLOT
-var seedrandom = require('seedrandom');
-seedrandom('hello.', { global: true });
+// var seedrandom = require('seedrandom');
+// seedrandom('hello.', { global: true });
 
 // DATA LOADING
 domReady(() => {
   fetch("./data/finalData.json")
     .then(response => response.json())
     .then(data => runAll(data))
-    //.then(data => makeJitter(data))
     .catch(e => {
       console.log(e);
     });
@@ -31,11 +30,13 @@ function runAll(json) {
   makeJitter(json, state.line);
   makeSlider(json, function(d) {
     d3.select('#map').selectAll("*").remove();
+    d3.select('#legend').selectAll("*").remove();
     state.year = d;
     makeMap(json, state.year, state.race);
   });
   makeDropDown(json, function(d) {
     d3.select('#map').selectAll("*").remove();
+    d3.select('#legend').selectAll("*").remove();
     state.race = this.value;
     makeMap(json, state.year, state.race);
   });
@@ -92,7 +93,7 @@ function makeMap(json, year, race) {
     .enter()
     .append("path")
     .filter(function(d) {
-      return d.properties.Year === year || d.properties.Race == race;
+      return d.properties.Year === year || d.properties.Race === race;
     })
     .attr("d", path)
     .attr("fill", function(d) {
@@ -108,13 +109,14 @@ function makeMap(json, year, race) {
         .style("top", d3.event.pageY + "px")
         .text(d.properties.UHF_NEIGH);
       
+      //Make the line move to where the neighborhood's diagnosis rate is
       var points = [{x: d.properties["HIV diagnosis rate"], y: 0}, {x: d.properties["HIV diagnosis rate"], y: 5}]
       d3.select('#jitter').selectAll("*").remove();
       makeJitter(json, points);
     })
-    // .on("mouseout", function(d) {
-    //   d3.select("#tooltip").style("opacity", 0);
-    // });
+    .on("mouseout", function(d) {
+      d3.select("#tooltip").style("opacity", 0);
+    });
 
   //add tooltip
   d3.select("#tooltip")
@@ -138,7 +140,7 @@ function makeJitter(json, points) {
   var jitterWidth = 4;
   var xScale = d3
     .scaleLinear()
-    .domain([0, 200])
+    .domain([0, 640])
     .range([padding, width - padding * 2]);
   var xAxis = d3.axisBottom(xScale);
   var yScale = d3
