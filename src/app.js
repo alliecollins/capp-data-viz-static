@@ -107,7 +107,7 @@ function makeMap(json, year, race) {
         .attr("height", 200)
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px")
-        .text(d.properties.UHF_NEIGH);
+        .text(d.properties.UHF_NEIGH + ': ' + d.properties["HIV diagnosis rate"] + ' diagnoses per 1000 population');
       
       //Make the line move to where the neighborhood's diagnosis rate is
       var points = [{x: d.properties["HIV diagnosis rate"], y: 0}, {x: d.properties["HIV diagnosis rate"], y: 5}]
@@ -154,12 +154,16 @@ function makeJitter(json, points) {
     .data(json.features)
     .enter()
     .append("circle")
+    //Filter out all of the 0s for Central Park, and missing data (confirmed 0s correspond to missing data the source file)
+    .filter(function(d) {
+      return d.properties["HIV diagnosis rate"] !== 0;
+    })
     .attr("class", "dot")
     .attr("cy", function() {
       return yScale(Math.random() * jitterWidth);
     })
     .attr("cx", function(d) {
-      d.total = d.properties["HIV diagnosis rate"] || 0;
+      d.total = d.properties["HIV diagnosis rate"];
       return xScale(d.total);
     })
     .attr("r", 2)
