@@ -16,13 +16,13 @@
       </p>
 
       <p id='intro-p2'>
-        The below map leverages data from NYC's open data portal to illustrate how the rate of new diagnoses (for males, given they comprise the majority of cases) has shifted over time, as well the racial disparities that persist. Use the slider to select a given year and the dropdown menu to select all races or filter for a given race. Hover over a particular neighborhood and note that the jitter plot will draw a line where the particular neighborhood and race combination fits into the overall distribution of new diagnosis rates. Note that the white space in Manhattan is Central Park, which does not have inhabitants.
+        The below map leverages data from NYC's open data portal to illustrate how the rate of new diagnoses (for males, given they comprise the majority of cases) has shifted over time, as well the racial disparities that persist. Use the slider to select a given year and the dropdown menu to select all races or filter for a given race. Hover over a particular neighborhood and note that the jitter plot will draw a line where the particular neighborhood and race combination fits into the overall distribution of new diagnosis rates. Note that a report of zero diagnoses (indicated as the color white) connotes missing information, annd the white space in Manhattan is Central Park, which does not have inhabitants.
       </p>
       <p id='intro-p3'>
         Note that the data are loading - this may take some time!
       </p>
     </div>
-    <div class="loader">Loading...</div>
+<!--     <div class="loader">Loading...</div> -->
     <div id="tooltip"></div>
     <label for="slider">Select a year betweeen 2011 and 2015:</label>
     <div id="slider"></div>
@@ -35,6 +35,8 @@
     </p>
     <div id='jitter'></div>
     <div id="app"></div>
+     <p id='githubLink'>
+        Click this link to access the <a href= "https://github.com/alliecollins/capp-dynamic">repository</a></p> 
    <script src="bundle.js"></script>
   </body>
 </html>

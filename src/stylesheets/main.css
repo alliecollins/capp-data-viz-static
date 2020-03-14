@@ -44,7 +44,7 @@ li {
 	display: inline-block;
 }
 
-.loader,
+/*.loader,
 .loader:after {
   border-radius: 50%;
   width: 10em;
@@ -84,4 +84,4 @@ li {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
-}
+}*/

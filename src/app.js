@@ -11,7 +11,7 @@ import "./stylesheets/main.css";
 
 // DATA LOADING
 domReady(() => {
-  fetch("./data/finalData.json")
+  fetch("./data/finalData2.json")
     .then(response => response.json())
     .then(data => runAll(data))
     .catch(e => {
@@ -44,6 +44,7 @@ function runAll(json) {
 
 // CREATE MAP
 function makeMap(json, year, race) {
+
   const width = 1000;
   const height = 600;
   const margin = {
@@ -93,7 +94,7 @@ function makeMap(json, year, race) {
     .enter()
     .append("path")
     .filter(function(d) {
-      return d.properties.Year === year || d.properties.Race === race;
+      return d.properties.Year === year & d.properties.Race === race;
     })
     .attr("d", path)
     .attr("fill", function(d) {
