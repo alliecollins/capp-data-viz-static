@@ -3,11 +3,6 @@ const domReady = require("domready");
 import * as d3 from "d3";
 import { sliderHorizontal } from "d3-simple-slider";
 import "./stylesheets/main.css";
-//import 'seedrandom';
-
-//SET RANDOM SEED FOR JITTER PLOT
-// var seedrandom = require('seedrandom');
-// seedrandom('hello.', { global: true });
 
 // DATA LOADING
 domReady(() => {
@@ -108,7 +103,7 @@ function makeMap(json, year, race) {
         .attr("height", 200)
         .style("left", d3.event.pageX + "px")
         .style("top", d3.event.pageY + "px")
-        .text(d.properties.UHF_NEIGH + ': ' + d.properties["HIV diagnosis rate"] + ' diagnoses per 1000 population');
+        .text(d.properties.UHF_NEIGH + ': ' + d.properties["HIV diagnosis rate"] + ' diagnoses per 100,000 population');
       
       //Make the line move to where the neighborhood's diagnosis rate is
       var points = [{x: d.properties["HIV diagnosis rate"], y: 0}, {x: d.properties["HIV diagnosis rate"], y: 5}]
